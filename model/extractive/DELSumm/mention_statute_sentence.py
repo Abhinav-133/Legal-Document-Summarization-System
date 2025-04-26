@@ -1,15 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed May  5 11:47:19 2021
-
-@author: Paheli
-"""
-# -*- coding: utf-8 -*-
-"""
-Created on Sat May  1 18:05:13 2021
-
-@author: Paheli
-"""
 import re
 import string
 import os

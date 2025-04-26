@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Apr 10 11:19:18 2020
-
-@author: Paheli
-"""
 import codecs
 
 def isStatute(sentence,actlist):
