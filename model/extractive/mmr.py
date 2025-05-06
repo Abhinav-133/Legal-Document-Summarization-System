@@ -4,7 +4,7 @@ import string
 import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
 
-def generate_mmr_summary(text, desired_length_words=40000, lambda_param=0.6):
+def generate_mmr_summary(text, desired_length_words=500, lambda_param=0.6):
     def split_into_sentences(text):
         return sent_tokenize(text)
     
@@ -77,16 +77,3 @@ def generate_mmr_summary(text, desired_length_words=40000, lambda_param=0.6):
     selected_sentences = [doc[i] for i in summary_indices]
     summary = " ".join(selected_sentences)
     return summary
-
-text = """N: Criminal Appeal No. 8 of 1951.
-Appeal from an Order of the High Court of Bombay (Bavdekar and Chainani JJ.) dated 20th February, 1950, in Criminal Appeal No. 106 of 1950 arising out of an order dated 9th January, 1950, of the Presidency Magistrate, 19th Court, Esplanade, Bombay, in Case No. 10879/P of 1949.
-The facts are stated in the judgment.
-Iswarlal C. Dalai and R.B. Dalai, for the appellant.
-C.K. Daphtary, Solicitor General for India (G. N. Joshi, with him) for the Republic of India (respondent No. 1).Jindra Lal for the respondent No. 2. 1952.
-February 1.
-The Judgment of the Court was deliv ered by CHANDRASEKHARA AIYAR J.
-The facts out of which this Crimi nal Appeal has arisen are not long.
-The appellant, W.H. King, who is carrying on a business in Bombay under the name and style of Associated Commercial Enterprises, was the tenant of a flat on the second floor of a building called "Ganga Vihar", Marine Drive, Bombay, which belongs to a lady named Durgeshwari Devi.
-"""
-summary = generate_mmr_summary(text)
-print(summary)
