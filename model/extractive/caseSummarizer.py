@@ -32,20 +32,16 @@ def generate_summary(text):
     with open('dictionary.txt', 'r', encoding='utf-8') as f:
         legal_terms = [line.strip() for line in f]
     
-    # Preprocessing
-    text = re.sub(r'\n+', ' ', text)          # Remove newlines
-    text = re.sub(r'\s+', ' ', text).strip()   # Remove extra spaces
+    text = re.sub(r'\n+', ' ', text)          
+    text = re.sub(r'\s+', ' ', text).strip()   
     
-    # Tokenize sentences
     tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
     sentences = tokenizer.tokenize(text)
     
-    # Preprocess sentences and calculate DF
     processed_sentences = []
     df_vec = {}
     
     for sentence in sentences:
-        # Normalize, remove stopwords, lemmatize
         processed = []
         words = word_tokenize(sentence.lower())
         for w in words:
@@ -57,39 +53,31 @@ def generate_summary(text):
     
     total_sentences = len(sentences)
     
-    # Calculate TF-IDF for each sentence
     sentence_scores = []
     
     for i, (original_sent, processed) in enumerate(zip(sentences, processed_sentences)):
-        # Calculate TF
         tf = {}
         length = len(processed)
         for word in processed:
             tf[word] = tf.get(word, 0) + 1/length
         
-        # Calculate TF-IDF
         tfidf_sum = 0
         for word in processed:
             idf = math.log(total_sentences / df_vec[word]) if df_vec.get(word) else 0
             tfidf_sum += tf[word] * idf
         
-        # Additional features
         ne_list = get_continuous_chunks(original_sent)
         e = len(ne_list)/len(processed) if processed else 0
         d = 1 if any(char.isdigit() for char in original_sent) else 0
         
-        # Legal terms match
         legal_matches = sum(1 for term in legal_terms if term.lower() in original_sent.lower())
         g = legal_matches/len(processed) if processed else 0
         
-        # Combined score
         score = tfidf_sum + (0.2 * d + 0.3 * e + 1.5 * g)
         sentence_scores.append((original_sent, score, len(word_tokenize(original_sent))))
     
-    # Sort sentences by score
     sorted_sentences = sorted(sentence_scores, key=lambda x: x[1], reverse=True)
     
-    # Select sentences until we reach ~500 words
     summary = []
     word_count = 0
     target_length = 500

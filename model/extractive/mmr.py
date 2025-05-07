@@ -30,7 +30,7 @@ def generate_mmr_summary(text, desired_length_words=500, lambda_param=0.6):
                     pairwise_sim[-1].append(sim)
                     max_val = max(max_val, sim)
                 else:
-                    pairwise_sim[-1].append(1)  # similarity with itself
+                    pairwise_sim[-1].append(1)  
             max_sim.append(max_val)
         return pairwise_sim, max_sim
     
@@ -39,15 +39,13 @@ def generate_mmr_summary(text, desired_length_words=500, lambda_param=0.6):
             return 0
         return max(pair_sim[index][j] for j in selected_indices)
 
-    # Split the text into sentences
     doc = split_into_sentences(text)
     if not doc:
-        return ""  # No sentences found
+        return ""  
 
     word_counts = [count_word(sent) for sent in doc]
     pair_similarity, l3 = compute_pairwise_similarities(doc)
 
-    # Initialize variables for MMR process
     summary_indices = []
     summary_word_count = 0
 
@@ -69,11 +67,9 @@ def generate_mmr_summary(text, desired_length_words=500, lambda_param=0.6):
         summary_indices.append(best_index)
         summary_word_count += word_counts[best_index]
         
-        # If the word count goes over, stop adding further
         if summary_word_count >= desired_length_words:
             break
 
-    # Select the sentences based on the best indices
     selected_sentences = [doc[i] for i in summary_indices]
     summary = " ".join(selected_sentences)
     return summary
