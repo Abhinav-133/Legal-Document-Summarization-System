@@ -2,7 +2,6 @@ from transformers import LEDTokenizer, LEDForConditionalGeneration
 import torch
 
 def generate_led_summary(input_text, model_path="/Users/abhinavmittal/desktop/minor/model/abstractive/led", max_input_length=1024, max_output_length=256):
-    # Initialize model and tokenizer once
     if not hasattr(generate_led_summary, "tokenizer"):
         generate_led_summary.tokenizer = LEDTokenizer.from_pretrained(model_path)
         generate_led_summary.model = LEDForConditionalGeneration.from_pretrained(model_path)
@@ -10,7 +9,6 @@ def generate_led_summary(input_text, model_path="/Users/abhinavmittal/desktop/mi
         generate_led_summary.model.to(generate_led_summary.device)
 
     try:
-        # Tokenize input
         inputs = generate_led_summary.tokenizer(
             input_text,
             return_tensors="pt",
@@ -19,11 +17,9 @@ def generate_led_summary(input_text, model_path="/Users/abhinavmittal/desktop/mi
             max_length=max_input_length
         )
 
-        # Move to device
         input_ids = inputs.input_ids.to(generate_led_summary.device)
         attention_mask = inputs.attention_mask.to(generate_led_summary.device)
 
-        # Generate summary
         output_ids = generate_led_summary.model.generate(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -32,7 +28,6 @@ def generate_led_summary(input_text, model_path="/Users/abhinavmittal/desktop/mi
             early_stopping=True
         )
 
-        # Decode and return
         return generate_led_summary.tokenizer.decode(output_ids[0], skip_special_tokens=True)
     
     except Exception as e:

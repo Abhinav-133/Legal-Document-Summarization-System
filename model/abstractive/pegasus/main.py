@@ -85,5 +85,4 @@ def pegasus_summarize(text: str, max_length: int = 256, min_length: int = 50) ->
         return f"Summarization error: {e}"
 
 
-# Ensure initialization at import time so errors are visible immediately
 initialize_summarizer()
